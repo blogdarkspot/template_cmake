@@ -1,0 +1,104 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        ,
+        {
+            "label": "Try Clear Folder",
+            "type": "shell",
+            "command": "rm",
+            "args": [
+                "-rf",
+                "build/*"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "none"
+        },
+        {
+            "label": "Try Create Folder",
+            "type": "shell",
+            "command": "mkdir",
+            "args": [
+                "-p",
+                "build",
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "none"
+        },
+        {
+            "label": "Generate Debug",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-DCMAKE_BUILD_TYPE=Debug",
+                ".."
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            },
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Try Create Folder",
+                "Try Clear Folder"
+            ]
+        },
+        {
+            "label": "Generate Release",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-DCMAKE_BUILD_TYPE=Release",
+                ".."
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            },
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Try Create Folder",
+                "Try Clear Folder"
+            ]
+        },
+        {
+            "label": "Build Debug",
+            "type": "shell",
+            "command": "make",
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": [
+                "Generate Debug"
+            ]
+        },
+        {
+            "label": "Build Release",
+            "type": "shell",
+            "command": "make",
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            },
+            "group": "build",
+            "dependsOn": [
+                "Generate Release"
+            ],
+        },
+        {
+            "label": "Rebuild",
+            "type": "shell",
+            "command": "make",
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            },
+            "group": "build"
+        }
+    ]
+}
